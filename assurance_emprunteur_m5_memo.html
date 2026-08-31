@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>L'équivalence de garanties et la substitution</title>
+<style>
+:root{--prune:#8C1E70;--prune-fonce:#5E1349;--prune-clair:#F4E6EE;--accent:#C77BAA;
+ --vert:#283C28;--gris:#3C3C3C;--gris-moyen:#8A7A85;--filet:#E8DCE5;--creme:#FAF6F8;
+ --ok:#2F7A4F;--ko:#B23B3B;--amb:#B5852A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--creme);color:var(--gris);
+ font-family:"Nunito","Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.62}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px 60px}
+header.bandeau{background:var(--prune-fonce);color:#fff;padding:18px 0;border-bottom:4px solid var(--accent)}
+header.bandeau .wrap{padding-bottom:0}
+.chapitre{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#EAD3E3}
+.chapitre span{color:var(--accent);margin:0 6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.25;margin:8px 0 4px;color:#fff}
+.sous{color:#EAD3E3;font-size:14.5px;margin:0}
+h2{font-family:Georgia,"Times New Roman",serif;font-size:20px;color:var(--prune-fonce);
+ margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var(--filet)}
+h2 .num{color:var(--accent);margin-right:8px}
+h3{font-size:15px;color:var(--vert);margin:20px 0 8px;letter-spacing:.02em}
+.carte{background:#fff;border:1px solid var(--filet);border-radius:10px;padding:20px 22px;margin:18px 0;
+ box-shadow:0 1px 2px rgba(94,19,73,.05)}
+.enc{background:var(--prune-clair);border-left:5px solid var(--prune);padding:14px 18px;
+ border-radius:0 8px 8px 0;margin:18px 0;font-size:15.2px}
+.enc .t{display:block;font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+ font-weight:800;color:var(--prune-fonce);margin-bottom:6px}
+.enc.al{background:#FBF4F4;border-left-color:var(--ko)}.enc.al .t{color:var(--ko)}
+.enc.ci{background:#FCF8F0;border-left-color:var(--amb)}.enc.ci .t{color:#8A6418}
+.situ{background:#FCF9FB;border:1px dashed var(--filet);border-radius:8px;padding:16px 18px;margin:16px 0;font-size:15.2px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.duo>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:15px 17px;font-size:14.8px}
+.duo .h{font-weight:800;color:var(--prune-fonce);margin-bottom:7px;font-size:14.5px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tri>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:14px 15px;font-size:14.3px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.quad>div{background:#fff;border:1px solid var(--filet);border-radius:9px;padding:12px 13px;font-size:13.6px}
+.quad .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13px;
+ text-transform:uppercase;letter-spacing:.04em}
+.tri .h{font-weight:800;color:var(--prune-fonce);margin-bottom:6px;font-size:13.5px;
+ text-transform:uppercase;letter-spacing:.05em}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.8px;background:#fff}
+th,td{border:1px solid var(--filet);padding:9px 12px;text-align:left}
+thead th{background:var(--prune-clair);color:var(--prune-fonce);font-size:13.5px}
+tbody th{font-weight:600;color:var(--gris)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td,tr.tot th{background:#FBF3F8;font-weight:800;color:var(--prune-fonce)}
+.dl{display:inline-flex;align-items:center;gap:9px;background:var(--prune);color:#fff;text-decoration:none;
+ padding:11px 20px;border-radius:8px;font-weight:700;font-size:15px;margin:20px 0 4px}
+.dl:hover{background:var(--prune-fonce)}
+ol.q{padding-left:0;list-style:none;counter-reset:q}
+ol.q>li{margin:16px 0;padding-left:38px;position:relative}
+ol.q>li::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:1px;
+ width:26px;height:26px;border-radius:50%;background:var(--prune-clair);color:var(--prune-fonce);
+ font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+b,strong{color:var(--vert)}
+footer{text-align:center;font-size:12.5px;color:var(--gris-moyen);padding:26px 18px 12px;
+ border-top:1px solid var(--filet);margin-top:44px}
+@media(max-width:860px){.quad{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.duo,.tri,.quad{grid-template-columns:1fr}h1{font-size:22px}}
+@media print{body{background:#fff}.dl{display:none}header.bandeau{background:#5E1349 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style></head>
+<body>
+<header class="bandeau"><div class="wrap">
+ <div class="chapitre">IOBSP Niveau 2 · Journée 10 <span>/</span> Les assurances emprunteurs — Module 5</div><h1>L'équivalence de garanties et la substitution</h1><p class="sous">Fiche mémo détaillée — l'équivalence ne se discute pas, elle se vérifie</p>
+</div></header>
+<div class="wrap">
+<a class="dl" href="J10_M5_Fiche_memo.pdf" download>⬇ Télécharger la fiche mémo (PDF)</a>
+<h2><span class="num">1 ·</span>La question, et pourquoi elle est décisive</h2>
+<div class="carte">
+<div class="enc"><span class="t">LE PROBLÈME POSÉ PAR LE MODULE 4</span>Le prêteur ne peut pas refuser un contrat présentant un niveau de garantie <b>ÉQUIVALENT</b>. Mais équivalent à quoi, et <b>SELON QUI</b> ? Si la banque décidait seule et à sa convenance, le droit du module 4 ne vaudrait rien : il lui suffirait de dire non.</div>
+<div class="enc"><span class="t">LA RÉPONSE</span><b>L&#x27;ÉQUIVALENCE N&#x27;EST PAS SUBJECTIVE</b>. Elle se mesure <b>CRITÈRE PAR CRITÈRE</b>, sur une liste publique — et la banque a dû annoncer ses exigences À</div>
+<div class="enc"><span class="t">L&#x27;AVANCE ET PAR ÉCRIT.</span>Vous pouvez donc savoir <b>AVANT</b> de déposer une demande si elle a des chances d&#x27;aboutir.</div>
+</div>
+<h2><span class="num">2 ·</span>Le cadre — l&#x27;avis du CCSF</h2>
+<div class="carte">
+<p>Le cadre a été posé par un avis du Comité consultatif du secteur financier (CCSF) du 13 janvier 2015, qui établit une <b>LISTE DE PLACE</b> permettant de comparer objectivement deux contrats.</p>
+<table><thead><tr>
+<th>18 critères sur le <b>SOCLE</b></th>
+<th>8 critères sur la <b>PERTE D&#x27;EMPLOI</b></th>
+<th>11 <b>AU MAXIMUM</b></th>
+<th>4 <b>AU MAXIMUM</b></th>
+</tr></thead><tbody>
+<tr><td>décès · PTIA · invalidité · incapacité</td><td>garantie facultative</td><td>opposables sur le socle</td><td>opposables sur la perte d&#x27;emploi</td></tr>
+</tbody></table>
+<div class="enc"><span class="t">POURQUOI CE PLAFOND EXISTE</span>Une banque <b>NE PEUT PAS</b> empiler les exigences à l&#x27;infini pour rendre toute délégation impossible. Le plafond est là exactement pour ça.</div>
+<table><thead><tr>
+<th>Point</th>
+<th>Contenu</th>
+</tr></thead><tbody>
+<tr><td>Comment la banque choisit</td><td>En cohérence avec les garanties de son propre contrat de groupe, selon sa politique de risques, et en fonction du type d&#x27;opération et du statut professionnel de l&#x27;emprunteur — salarié, indépendant, senior</td></tr>
+<tr><td>Portée des critères retenus</td><td>Depuis l&#x27;entrée en vigueur du dispositif en 2015, ce sont <b>LES SEULS</b> sur lesquels un refus de non-équivalence peut se fonder</td></tr>
+</tbody></table>
+</div>
+<h2><span class="num">3 ·</span>Le document central — la fiche standardisée d&#x27;information</h2>
+<div class="carte">
+<div class="enc"><span class="t">COMMENT SAVOIR QUELS CRITÈRES VOTRE BANQUE A RETENUS</span>La réponse tient dans un document : <b>LA FICHE STANDARDISÉE D&#x27;INFORMATION</b>. Elle est remise dès la phase de simulation et comporte une rubrique listant <b>LES EXIGENCES DE L&#x27;ÉTABLISSEMENT</b> en matière d&#x27;équivalence. Les établissements communiquent également leurs exigences générales sur leur site internet.</div>
+</div>
+<h2>Les critères ne se devinent pas. <b>ILS SONT ÉCRITS</b> — et écrits <b>AVANT</b> la demande.</h2>
+<div class="carte">
+<div class="enc al"><span class="t">NE PAS CONFONDRE AVEC LA FISE DE LA JOURNÉE 12</span><b>LA FISE</b> — fiche d&#x27;information standardisée européenne — porte sur <b>LE CRÉDIT</b> : ses caractéristiques, son TAEG. <b>LA FICHE STANDARDISÉE D&#x27;INFORMATION</b> dont il s&#x27;agit ici porte sur <b>L&#x27;ASSURANCE</b> et sur les exigences d&#x27;équivalence.</div>
+</div>
+<h2><span class="num">4 ·</span>La méthode, en quatre temps</h2>
+<div class="carte">
+<div class="quad">
+<div><div class="h">① <b>RÉCUPÉRER</b></div>La fiche standardisée d&#x27;information de la banque, et y lire la liste des critères exigés Sauter cette étape est l&#x27;erreur coûteuse</div>
+<div><div class="h">② <b>VÉRIFIER</b></div>Critère par critère, sur les conditions générales du contrat envisagé la plus</div>
+<div><div class="h">③ <b>CORRIGER</b></div>Traiter les écarts <b>AVANT</b> de déposer : demander à l&#x27;assureur d&#x27;ajuster — ce que permet un contrat individuel (module 3)</div>
+<div><div class="h">④ <b>DÉPOSER</b></div>La demande, avec les pièces, en sachant qu&#x27;elle est conforme</div>
+</div>
+<div class="enc"><span class="t">CE QUE CETTE MÉTHODE CHANGE</span>On ne dépose plus une demande <b>EN ESPÉRANT</b> qu&#x27;elle passe.</div>
+<div class="enc"><span class="t">ON DÉPOSE UNE DEMANDE DONT ON A VÉRIFIÉ QU&#x27;ELLE EST CONFORME.</span></div>
+</div>
+<h2><span class="num">5 ·</span>Sur quoi portent les critères — c&#x27;est tout le module 2</h2>
+<div class="carte">
+<table><thead><tr>
+<th>Le critère porte sur…</th>
+<th>Ce que vous avez vu au module 2</th>
+</tr></thead><tbody>
+<tr><td>La <b>DÉFINITION</b> de l&#x27;incapacité</td><td>« Sa profession » (favorable) ou « toute profession » (restrictif)</td></tr>
+<tr><td>La <b>DURÉE DE FRANCHISE</b></td><td>30, 60, 90 ou 180 jours — 3 300 € d&#x27;écart sur l&#x27;exemple du module 2</td></tr>
+<tr><td>Le <b>DÉLAI DE CARENCE</b></td><td>Il part du contrat, là où la franchise part du sinistre</td></tr>
+<tr><td>Le <b>MODE D&#x27;INDEMNISATION</b></td><td>Forfaitaire ou indemnitaire — 3 900 € d&#x27;écart</td></tr>
+<tr><td>Les <b>SEUILS</b> d&#x27;invalidité</td><td>66 % pour l&#x27;IPT, 33 à 66 % pour l&#x27;IPP — standards de marché</td></tr>
+<tr><td>Les affections <b>DORSALES</b> et <b>PSYCHIQUES</b> Les <b>LIMITES D&#x27;ÂGE</b> et modalités de prise en charge</td><td>Les deux exclusions qui portent sur ce qui arrive le plus souvent</td></tr>
+</tbody></table>
+<div class="enc"><span class="t">LE LIEN À FAIRE, ET IL N&#x27;A RIEN D&#x27;UN HASARD</span>Souvenez-vous du module 2 : trois contrats portant tous la mention « ITT » versaient 5 500 €, 2 200 € et 1 600 €. Les critères d&#x27;équivalence servent exactement à empêcher qu&#x27;on présente le troisième comme équivalent au premier. Et cela fonctionne dans les deux sens : ils protègent la banque contre une couverture insuffisante, et le client contre un refus arbitraire.</div>
+</div>
+<h2><span class="num">6 ·</span>Les deux refus irréguliers</h2>
+<div class="carte">
+<ol class="q">
+<li>La configuration Pourquoi le refus n&#x27;est pas fondé</li>
+<li>La banque refuse en invoquant <b>UN CRITÈRE QUI NE FIGURE PAS SUR SA FICHE STANDARDISÉE D&#x27;INFORMATION</b> Les critères retenus sont les seuls sur lesquels un refus peut se fonder, et ils ont été annoncés à l&#x27;avance. Une banque ne peut pas ajouter une exigence en cours de route parce que la demande la dérange</li>
+<li>La banque a retenu <b>PLUS DE 11 CRITÈRES</b> sur le socle, ou plus de 4 sur la perte d&#x27;emploi Elle sort du cadre auquel la profession a adhéré. Plus rare, mais à relever</li>
+</ol>
+<div class="enc"><span class="t">LA QUESTION REDOUTABLE — ELLE COMBINE LES MODULES 4 ET 5</span>① Rappeler que l&#x27;article L. 313-30 du code de la consommation impose un refus explicite comportant l&#x27;intégralité des motifs.</div>
+<div class="enc"><span class="t">② Puis demander : SUR QUEL CRITÈRE DE LA FICHE STANDARDISÉE D&#x27;INFORMATION LE REFUS SE FONDE-T-IL ?</span></div>
+<p>Cette question n&#x27;a que deux réponses possibles : • soit la banque désigne un critère de sa fiche → vous savez quoi corriger ; • soit elle ne peut en désigner aucun → son refus tombe.</p>
+</div>
+<h2><b>L&#x27;ÉQUIVALENCE NE SE DISCUTE PAS</b>. <b>ELLE SE VÉRIFIE</b>.</h2>
+<div class="carte">
+<div class="enc"><span class="t">À RETENIR</span>• Les critères viennent d&#x27;un avis du CCSF du 13 janvier 2015 — une liste de place. • 18 critères sur le socle · 8 sur la perte d&#x27;emploi. • La banque en oppose 11 <b>AU PLUS</b> · et 4 <b>AU PLUS</b> sur la perte d&#x27;emploi. • Ils figurent sur la <b>FICHE STANDARDISÉE D&#x27;INFORMATION</b>, remise dès la simulation. • Ce sont les seuls sur lesquels un refus de non-équivalence peut se fonder. • La méthode : lire · comparer · corriger <b>AVANT</b> de déposer · déposer. Sources vérifiées au 20 août 2026. Avis du Comité consultatif du secteur financier du 13 janvier 2015 établissant une liste de place de critères d&#x27;équivalence de garanties ; plafonnement à onze critères opposables sur le socle décès, PTIA, invalidité et incapacité, et à quatre sur la garantie perte d&#x27;emploi ; communication des exigences retenues par la fiche standardisée d&#x27;information et sur le site internet des établissements ; caractère exclusif des critères retenus pour fonder un refus de non-équivalence : sources professionnelles concordantes et nombreuses. Rappel du module 4 — article L. 313-30 du code de la consommation, texte relevé sur Légifrance. Rappels du module 2 (définition de l&#x27;incapacité, franchise, carence, mode d&#x27;indemnisation, seuils d&#x27;invalidité, exclusions dorsales et psychiques), du module 3 (garanties ajustables du contrat individuel) et de la journée 12 (distinction avec la FISE). Arrêté du 18 juillet 2022, annexe A, section A.4. <b>RÉSERVES</b> : l&#x27;avis du CCSF n&#x27;a pas été consulté directement — sa référence, sa date et son contenu proviennent de sources professionnelles concordantes ; le décompte de « 18 critères » est un décompte d&#x27;usage professionnel qui, selon certaines sources, n&#x27;apparaît pas sous cette forme dans les documents du CCSF — ce qui est constant, ce sont les plafonds de 11 et 4 critères opposables, et c&#x27;est ainsi que ces supports sont construits ; la liste détaillée des critères n&#x27;est pas reproduite ici, relevant de l&#x27;avis du CCSF et des fiches standardisées d&#x27;information de chaque établissement ; les dates d&#x27;entrée en vigueur du dispositif circulent sous plusieurs formes dans les sources professionnelles — l&#x27;année 2015 est retenue sans mention de jour.</div>
+</div>
+<footer>TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer>
+</div></body></html>
